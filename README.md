@@ -1,0 +1,3 @@
+- 👋 Hi, I’m @Elevatorisbest
+- 👀 I’m interested in ehhh, games and cs:go esport
+- 🌱 I’m currently learning fun stuff in Blender once in a while
