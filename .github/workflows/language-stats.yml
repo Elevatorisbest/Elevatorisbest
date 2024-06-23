@@ -1,4 +1,4 @@
-name: Generate Language Stats
+name: Update README with language stats
 
 on:
   schedule:
@@ -11,26 +11,23 @@ on:
 jobs:
   update-readme:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Fetch language stats
+        uses: anmol098/waka-readme-stats@master
         with:
-          node-version: '14'
-
-      - name: Generate Language Stats
-        run: |
-          curl -s https://api.github.com/repos/Elevatorisbest/Elevatorisbest/languages | jq -r 'to_entries | .[] | "\(.key): \(.value)"' > language-stats.txt
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
 
       - name: Update README
         run: |
-          sed -i '/<!--START_SECTION:language-stats-->/, /<!--END_SECTION:language-stats-->/c\<!--START_SECTION:language-stats-->\n'$(cat language-stats.txt)'\n<!--END_SECTION:language-stats-->' README.md
-
-      - name: Commit Changes
+          LANGUAGES=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" https://api.github.com/users/Elevatorisbest/repos?per_page=1000 | jq -r 'map(.language) | map(select(. != null)) | group_by(.) | map({(.[0]): length}) | add | to_entries | map("\(.key): \(.value)") | join("\n")')
+          echo "$LANGUAGES" > languages.txt
+          sed -i '/<!--START_SECTION:language-stats-->/, /<!--END_SECTION:language-stats-->/c\<!--START_SECTION:language-stats-->\n'$(cat languages.txt)'\n<!--END_SECTION:language-stats-->' README.md
+          rm languages.txt
+      - name: Commit changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
