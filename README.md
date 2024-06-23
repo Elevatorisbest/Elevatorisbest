@@ -3,3 +3,6 @@
 
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=Elevatorisbest)](https://github.com/anuraghazra/github-readme-stats)
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Elevatorisbest)](https://github.com/Elevatorisbest/ghstatspage)
+
+<!--START_SECTION:language-stats-->
+<!--END_SECTION:language-stats-->
