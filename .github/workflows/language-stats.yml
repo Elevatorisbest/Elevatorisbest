@@ -16,10 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Fetch language stats
-        uses: anmol098/waka-readme-stats@master
-        with:
-          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+##      - name: Fetch language stats
+##      uses: anmol098/waka-readme-stats@master
+##        with:
+##          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
 
       - name: Update README
         run: |
