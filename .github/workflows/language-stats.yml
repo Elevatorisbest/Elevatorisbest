@@ -1,0 +1,41 @@
+name: Generate Language Stats
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Generate Language Stats
+        run: |
+          curl -s https://api.github.com/repos/Elevatorisbest/Elevatorisbest/languages | jq -r 'to_entries | .[] | "\(.key): \(.value)"' > language-stats.txt
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Update README
+        run: |
+          sed -i '/<!--START_SECTION:language-stats-->/, /<!--END_SECTION:language-stats-->/c\<!--START_SECTION:language-stats-->\n'$(cat language-stats.txt)'\n<!--END_SECTION:language-stats-->' README.md
+
+      - name: Commit Changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git commit -m 'Update language stats'
+          git push
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
