@@ -21,8 +21,6 @@ jobs:
         
       - name: Commit stats
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
           git add stats.svg
           git commit -m "Update stats"
           git push
